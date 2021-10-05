@@ -49,4 +49,14 @@ class User extends Authenticatable
         'INACTIVE' => 0,
         'ACTIVE' => 1,
     ];
+
+    /**
+     * Get all of the subjects for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class);
+    }
 }
