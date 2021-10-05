@@ -29,7 +29,13 @@
                             <!-- /.card-header -->
                             <div class="card-body table-responsive table-box">
                                 <div class="table-box-card">
-                                    <table data-route="{{route('subject.list')}}" delete-route="{{route('subject.delete',['id' => ':id'])}}" id="subject_list" class="table table-bordered table-hover dataTable mlaTable">
+                                    <table
+                                        data-route="{{route('subject.list')}}"
+                                        delete-route="{{route('subject.delete',['id' => ':id'])}}"
+                                        id="subject_list"
+                                        class="table table-bordered table-hover dataTable mlaTable"
+                                        get-subject-route="{{route('subject.getSubject',['id' => ':id'])}}"
+                                        >
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -55,6 +61,9 @@
 
     {{-- Add Subjecy Model --}}
     @include('subject.add')
+
+    {{-- View Subjecy Model --}}
+    @include('subject.view')
 
 @endsection
 

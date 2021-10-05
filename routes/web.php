@@ -26,5 +26,6 @@ Route::group(['middleware' => 'auth'],function(){
     Route::post('/subjects/list', [SubjectController::class, 'getSubjectList'])->name('subject.list');
     Route::delete('/subjects/delete/{id}', [SubjectController::class, 'destroy'])->name('subject.delete');
     Route::get('/subjects/generate-pdf', [SubjectController::class, 'generatePDF'])->name('subject.generatePDF');
+    Route::get('/subjects/get/{id}', [SubjectController::class, 'show'])->name('subject.getSubject');
 
 });

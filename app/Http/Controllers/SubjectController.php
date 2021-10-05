@@ -130,4 +130,13 @@ class SubjectController extends Controller
 
         return $pdf->download('subjects.pdf');
     }
+
+    public function show($id)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => __('response.subject.get_success'),
+            'data' => Subject::whereId($id)->first()
+        ], $this->success_code);
+    }
 }

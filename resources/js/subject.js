@@ -25,10 +25,13 @@ var subject_list = $("#subject_list").DataTable({
             mRender: function (data, type, row) {
                 return `
                 <div class="d-flex">
-                 <button type="button" onClick="deleteSubject(${data})" class="btn btn-danger ">
-                  <i class="fas fa-trash "></i>
-                   </button>
-                   </div>
+                    <button type="button" onClick="viewSubject(${data})" class="btn btn-success m-1 ">
+                        <i class="fas fa-eye "></i>
+                    </button>
+                    <button type="button" onClick="deleteSubject(${data})" class="btn btn-danger m-1">
+                        <i class="fas fa-trash "></i>
+                    </button>
+                </div>
                 `;
             },
         },
@@ -71,6 +74,35 @@ $(document).ready(function () {
             if (result) {
                 deleteClub(id);
             }
+        });
+    };
+
+    window.viewSubject = function (id) {
+        $("#modalViewSubject").modal("show");
+        $("#subject_info_loader").show();
+        $("#subject_info_table").hide();
+        $.ajax({
+            url: $("#subject_list")
+                .attr("get-subject-route")
+                .replace(":id", id),
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                if (response.success && response.data) {
+                    $("#subject_title").text(response.data.title);
+                    $("#subject_name").text(response.data.name);
+                    $("#subject_description").text(response.data.description);
+                } else {
+                    errorAlert("Opps! Something went wrong");
+                }
+                $("#subject_info_loader").hide();
+                $("#subject_info_table").show();
+            },
+            error: function (response) {
+                errorAlert("Opps! Something went wrong");
+                $("#subject_info_loader").hide();
+                $("#subject_info_table").show();
+            },
         });
     };
 
