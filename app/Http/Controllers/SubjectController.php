@@ -6,6 +6,7 @@ use App\Http\Requests\AddSubjectRequest;
 use App\Http\Requests\FilterSubjectRequest;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use PDF;
 
 class SubjectController extends Controller
 {
@@ -116,5 +117,17 @@ class SubjectController extends Controller
             'success' => true,
             'message' => __('response.subject.delete_sucess'),
         ], $this->success_code);
+    }
+
+    public function generatePDF()
+    {
+        $data = [
+            'title' => 'Subject List PDF - ' . date('m/d/Y'),
+            'subjects' => Subject::all(),
+        ];
+
+        $pdf = PDF::loadView('pdf.subjects', $data);
+
+        return $pdf->download('subjects.pdf');
     }
 }

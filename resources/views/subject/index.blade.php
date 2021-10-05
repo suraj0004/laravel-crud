@@ -22,6 +22,7 @@
                                     <div class="col-6 text-right">
                                         <a href="" class="btn btn-primary btn-small" id="addNewSubject" data-toggle="modal"
                                             data-target="#modalAddSubjectForm">Add Subject</a>
+                                            <a href="{{route('subject.generatePDF')}}" class="btn btn-info btn-small" id="" >Generate Subjects PDF</a>
                                     </div>
                                 </div>
                             </div>
