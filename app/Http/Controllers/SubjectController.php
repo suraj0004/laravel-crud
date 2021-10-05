@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddSubjectRequest;
 use App\Http\Requests\FilterSubjectRequest;
+use App\Http\Requests\EditSubjectRequest;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use PDF;
@@ -137,6 +138,15 @@ class SubjectController extends Controller
             'success' => true,
             'message' => __('response.subject.get_success'),
             'data' => Subject::whereId($id)->first()
+        ], $this->success_code);
+    }
+
+    public function update(EditSubjectRequest $request, $id)
+    {
+        Subject::where('id', $id)->update($request->getData());
+        return response()->json([
+            'success' => true,
+            'message' => __('response.subject.update_sucess'),
         ], $this->success_code);
     }
 }

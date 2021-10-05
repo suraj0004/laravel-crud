@@ -1,3 +1,6 @@
+var edit_id = null;
+
+
 // Fetch subject listing
 var subject_list = $("#subject_list").DataTable({
     processing: true,
@@ -27,6 +30,9 @@ var subject_list = $("#subject_list").DataTable({
                 <div class="d-flex">
                     <button type="button" onClick="viewSubject(${data})" class="btn btn-success m-1 ">
                         <i class="fas fa-eye "></i>
+                    </button>
+                    <button type="button" onClick="showEditSubjectForm(${data})" class="btn btn-info m-1 ">
+                        <i class="fas fa-edit "></i>
                     </button>
                     <button type="button" onClick="deleteSubject(${data})" class="btn btn-danger m-1">
                         <i class="fas fa-trash "></i>
@@ -106,6 +112,40 @@ $(document).ready(function () {
         });
     };
 
+    window.showEditSubjectForm = function (id) {
+
+        $("#modalEditSubjectForm").modal("show");
+        $("#edit_subject_loader").show();
+        $("#edit_subject_submit_btn").hide();
+        $("#edit_info_response").hide();
+        $.ajax({
+            url: $("#subject_list")
+                .attr("get-subject-route")
+                .replace(":id", id),
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                if (response.success && response.data) {
+                    $("#edit_title").val(response.data.title);
+                    $("#edit_name").val(response.data.name);
+                    $("#edit_description").val(response.data.description);
+                } else {
+                    errorAlert("Opps! Something went wrong");
+                }
+                $("#edit_subject_loader").hide();
+                $("#edit_subject_submit_btn").show();
+                $("#edit_info_response").show();
+                edit_id = id;
+            },
+            error: function (response) {
+                errorAlert("Opps! Something went wrong");
+                $("#edit_subject_loader").hide();
+                $("#edit_subject_submit_btn").show();
+                $("#edit_info_response").show();
+            },
+        });
+    };
+
     function deleteClub(id) {
         $.ajax({
             url: $("#subject_list").attr("delete-route").replace(":id", id),
@@ -155,6 +195,41 @@ $("#add_subject").submit(function (e) {
             $("#add_subject_btn").prop("disabled", false);
             $("#add_subject_btn").show();
             $("#add_subject_loader").hide();
+            errorAlert(response.responseJSON.message);
+        },
+    });
+});
+
+
+
+// Update subject
+
+$("#edit_subject_form").submit(function (e) {
+    e.preventDefault();
+    $("#edit_subject_submit_btn").prop("disabled", true);
+    $("#edit_subject_submit_btn").hide();
+    $("#edit_subject_loader").show();
+
+    $.ajax({
+        url: ($(this).attr("action")).replace(":id", edit_id),
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        type: "post",
+        data: $("#edit_subject_form").serialize(),
+        success: function (response) {
+            $("#modalEditSubjectForm").modal("hide");
+            $("#edit_subject_form").trigger("reset");
+            subject_list.ajax.reload(null, false);
+            successAlert(response.message);
+            $("#edit_subject_submit_btn").prop("disabled", false);
+            $("#edit_subject_submit_btn").show();
+            $("#edit_subject_loader").hide();
+        },
+        error: function (response) {
+            $("#edit_subject_submit_btn").prop("disabled", false);
+            $("#edit_subject_submit_btn").show();
+            $("#edit_subject_loader").hide();
             errorAlert(response.responseJSON.message);
         },
     });

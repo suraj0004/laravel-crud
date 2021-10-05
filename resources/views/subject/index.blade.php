@@ -59,11 +59,14 @@
         </div>
     </div>
 
-    {{-- Add Subjecy Model --}}
+    {{-- Add Subject Model --}}
     @include('subject.add')
 
-    {{-- View Subjecy Model --}}
+    {{-- View Subject Model --}}
     @include('subject.view')
+
+    {{-- Edit Subject Model --}}
+    @include('subject.edit')
 
 @endsection
 
