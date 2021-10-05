@@ -87,7 +87,7 @@ class SubjectController extends Controller
             "recordsFiltered" => intval($totalFiltered),
             "data" => $data,
         );
-        return response()->json($json_data, 200);
+        return response()->json($json_data, $this->success_code);
     }
 
     /**
@@ -120,6 +120,11 @@ class SubjectController extends Controller
         ], $this->success_code);
     }
 
+    /**
+     * Generate and return a PDF file containing the subject information.
+     *
+     * @return PDF
+     */
     public function generatePDF()
     {
         $data = [
@@ -132,6 +137,12 @@ class SubjectController extends Controller
         return $pdf->download('subjects.pdf');
     }
 
+     /**
+     * get the specified subject.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
         return response()->json([
@@ -141,6 +152,12 @@ class SubjectController extends Controller
         ], $this->success_code);
     }
 
+     /**
+     * Update the specified subject.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(EditSubjectRequest $request, $id)
     {
         Subject::where('id', $id)->update($request->getData());
